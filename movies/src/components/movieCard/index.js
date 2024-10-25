@@ -1,4 +1,4 @@
-import React, { useContext  } from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -10,13 +10,14 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import Grid from "@mui/material/Grid2";
-import img from '../../images/film-poster-placeholder.png'
+import img from '../../images/film-poster-placeholder.png';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 export default function MovieCard({ movie, action }) {
-  const { favorites } = useContext(MoviesContext);
+  const { favorites, addToWatchlist } = useContext(MoviesContext);  // 获取 addToWatchlist 函数
 
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
@@ -52,13 +53,13 @@ export default function MovieCard({ movie, action }) {
 
       <CardContent>
         <Grid container>
-          <Grid size={{xs: 6}}>
+          <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
               {movie.release_date}
             </Typography>
           </Grid>
-          <Grid size={{xs: 6}}>
+          <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <StarRateIcon fontSize="small" />
               {"  "} {movie.vote_average}{" "}
@@ -68,14 +69,16 @@ export default function MovieCard({ movie, action }) {
       </CardContent>
 
       <CardActions disableSpacing> 
-        {action(movie)}
+        <PlaylistAddIcon 
+          onClick={() => addToWatchlist(movie)}  
+          style={{ cursor: 'pointer' }} 
+        />
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
           </Button>
         </Link>
       </CardActions>
-
     </Card>
   );
 }
