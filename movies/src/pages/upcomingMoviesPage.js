@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { getUpcomingMovies } from "../api/tmdb-api";
 import Spinner from '../components/spinner';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 const UpcomingMoviesPage = () => {
   const [movies, setMovies] = useState([]);
@@ -27,9 +28,7 @@ const UpcomingMoviesPage = () => {
     <PageTemplate
       title="Upcoming Movies"
       movies={movies}
-      action={(movie) => {
-        return <span>Upcoming</span>;
-      }}
+      action={() => <PlaylistAddIcon />}
     />
   );
 };

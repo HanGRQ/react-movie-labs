@@ -21,7 +21,7 @@ export default function MovieCard({ movie, action }) {
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
   } else {
-    movie.favorite = false
+    movie.favorite = false;
   }
 
   return (
@@ -67,7 +67,7 @@ export default function MovieCard({ movie, action }) {
         </Grid>
       </CardContent>
 
-      <CardActions disableSpacing>
+      <CardActions disableSpacing> 
         {action(movie)}
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
