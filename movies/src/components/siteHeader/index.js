@@ -26,8 +26,9 @@ const SiteHeader = () => {
   const menuOptions = [
     { label: "Home", path: "/" },
     { label: "Favorites", path: "/movies/favorites" },
-    { label: "Upcoming", path: "/movies/upcoming" },  // 新增即将上映页面
-    { label: "Option 4", path: "/" },
+    { label: "Upcoming", path: "/movies/upcoming" },
+    { label: "Trending", path: "/movies/trending" },      
+    { label: "Now Playing", path: "/movies/now_playing" } 
   ];
 
   const handleMenuSelect = (pageURL) => {
@@ -48,55 +49,55 @@ const SiteHeader = () => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             All you ever wanted to know about Movies!
           </Typography>
-            {isMobile ? (
-              <>
-                <IconButton
-                  aria-label="menu"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={open}
-                  onClose={() => setAnchorEl(null)}
-                >
-                  {menuOptions.map((opt) => (
-                    <MenuItem
-                      key={opt.label}
-                      onClick={() => handleMenuSelect(opt.path)}
-                    >
-                      {opt.label}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </>
-            ) : (
-              <>
+          {isMobile ? (
+            <>
+              <IconButton
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={open}
+                onClose={() => setAnchorEl(null)}
+              >
                 {menuOptions.map((opt) => (
-                  <Button
+                  <MenuItem
                     key={opt.label}
-                    color="inherit"
                     onClick={() => handleMenuSelect(opt.path)}
                   >
                     {opt.label}
-                  </Button>
+                  </MenuItem>
                 ))}
-              </>
-            )}
+              </Menu>
+            </>
+          ) : (
+            <>
+              {menuOptions.map((opt) => (
+                <Button
+                  key={opt.label}
+                  color="inherit"
+                  onClick={() => handleMenuSelect(opt.path)}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Offset />

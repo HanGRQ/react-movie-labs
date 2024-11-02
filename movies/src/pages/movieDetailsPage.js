@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import Spinner from '../components/spinner'
 // import useMovie from "../hooks/useMovie";   Redundant
 
-const MoviePage = (props) => {
+const MoviePage = () => {
   const { id } = useParams();
   const { data: movie, error, isLoading, isError } = useQuery(
     ["movie", { id: id }],
