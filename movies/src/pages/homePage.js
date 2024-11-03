@@ -3,33 +3,42 @@ import { getMovies } from "../api/tmdb-api";
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
-import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
+import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; // 如果有单独的AddToWatchlistIcon组件
+import WriteReviewIcon from "../components/cardIcons/writeReview";
 
 const HomePage = (props) => {
-
-  const {  data, error, isLoading, isError }  = useQuery('discover', getMovies)
+  const { data, error, isLoading, isError } = useQuery('discover', getMovies);
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
   if (isError) {
-    return <h1>{error.message}</h1>
-  }  
+    return <h1>{error.message}</h1>;
+  }
+
   const movies = data.results;
 
   // Redundant, but necessary to avoid app crashing.
-  const favorites = movies.filter(m => m.favorite)
-  localStorage.setItem('favorites', JSON.stringify(favorites))
+  const favorites = movies.filter(m => m.favorite);
+  localStorage.setItem('favorites', JSON.stringify(favorites));
 
   return (
     <PageTemplate
       title="Discover Movies"
       movies={movies}
       action={(movie) => {
-        return <AddToFavoritesIcon movie={movie} />
+        return (
+          <>
+            <AddToFavoritesIcon movie={movie} />
+            <AddToWatchlistIcon movie={movie} />
+            <WriteReviewIcon movie={movie} /> 
+          </>
+        );
       }}
     />
-);
+  );
 };
+
 export default HomePage;

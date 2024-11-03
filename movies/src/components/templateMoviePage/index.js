@@ -39,8 +39,8 @@ const TemplateMoviePage = ({ movie, children }) => {
                 }}
                 cols={1}
             >
-                {images.map((image) => (
-                    <ImageListItem key={image.file_path} cols={1}>
+                {images.map((image,index) => (
+                    <ImageListItem key={image.file_path ? image.file_path : index} cols={1}>
                     <img
                         src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
                         alt={image.poster_path}

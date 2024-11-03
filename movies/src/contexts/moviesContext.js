@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, createContext } from "react";
 
-export const MoviesContext = React.createContext(null);
+export const MoviesContext = createContext(null);
 
 const MoviesContextProvider = (props) => {
   const [favorites, setFavorites] = useState([]);
   const [myReviews, setMyReviews] = useState({});
-  const [watchlist, setWatchlist] = useState([]); 
+  const [watchlist, setWatchlist] = useState([]);
 
   // 添加到收藏夹
   const addToFavorites = (movie) => {
-    let newFavorites = [];
     if (!favorites.includes(movie.id)) {
-      newFavorites = [...favorites, movie.id];
-    } else {
-      newFavorites = [...favorites];
+      setFavorites([...favorites, movie.id]);
     }
-    setFavorites(newFavorites);
   };
 
   // 从收藏夹移除
@@ -27,14 +23,18 @@ const MoviesContextProvider = (props) => {
   const addToWatchlist = (movie) => {
     if (!watchlist.includes(movie.id)) {
       setWatchlist([...watchlist, movie.id]);
-      console.log("Watchlist updated:", [...watchlist, movie.id]);
+      if (process.env.NODE_ENV === "development") {
+        console.log("Watchlist updated:", [...watchlist, movie.id]);
+      }
     }
   };
 
   // 从必看列表移除
   const removeFromWatchlist = (movie) => {
     setWatchlist(watchlist.filter((mId) => mId !== movie.id));
-    console.log("Removed from watchlist:", watchlist.filter((mId) => mId !== movie.id));
+    if (process.env.NODE_ENV === "development") {
+      console.log("Removed from watchlist:", movie.id);
+    }
   };
 
   // 添加影评
@@ -46,12 +46,13 @@ const MoviesContextProvider = (props) => {
     <MoviesContext.Provider
       value={{
         favorites,
-        watchlist, 
+        watchlist,
+        myReviews,
         addToFavorites,
         removeFromFavorites,
+        addToWatchlist,
+        removeFromWatchlist,
         addReview,
-        addToWatchlist, 
-        removeFromWatchlist, 
       }}
     >
       {props.children}

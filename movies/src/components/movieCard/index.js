@@ -9,27 +9,22 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import img from '../../images/film-poster-placeholder.png';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
-export default function MovieCard({ movie, action }) {
-  const { favorites, addToWatchlist } = useContext(MoviesContext);  // 获取 addToWatchlist 函数
+export default function MovieCard({ movie, action, isFavoritePage = false }) {
+  const { favorites } = useContext(MoviesContext);
 
-  if (favorites.find((id) => id === movie.id)) {
-    movie.favorite = true;
-  } else {
-    movie.favorite = false;
-  }
+  const isFavorite = favorites.find((id) => id === movie.id) !== undefined;
 
   return (
     <Card>
       <CardHeader
         avatar={
-          movie.favorite ? (
+          !isFavoritePage && isFavorite ? (
             <Avatar sx={{ backgroundColor: 'red' }}>
               <FavoriteIcon />
             </Avatar>
@@ -41,7 +36,6 @@ export default function MovieCard({ movie, action }) {
           </Typography>
         }
       />
-
       <CardMedia
         sx={{ height: 500 }}
         image={
@@ -50,7 +44,6 @@ export default function MovieCard({ movie, action }) {
             : img
         }
       />
-
       <CardContent>
         <Grid container>
           <Grid item xs={6}>
@@ -67,12 +60,10 @@ export default function MovieCard({ movie, action }) {
           </Grid>
         </Grid>
       </CardContent>
+      <CardActions disableSpacing>
+        {/* 使用 action 动态渲染图标 */}
+        {action(movie)}
 
-      <CardActions disableSpacing> 
-        <PlaylistAddIcon 
-          onClick={() => addToWatchlist(movie)}  
-          style={{ cursor: 'pointer' }} 
-        />
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
