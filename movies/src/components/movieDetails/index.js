@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -21,7 +22,7 @@ const root = {
 };
 const chip = { margin: 0.5 };
 
-const MovieDetails = ({ movie }) => {  // Don't miss this!
+const MovieDetails = ({ movie }) => {  
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -34,47 +35,45 @@ const MovieDetails = ({ movie }) => {  // Don't miss this!
         {movie.overview}
       </Typography>
 
-      <Paper 
-        component="ul" 
-        sx={{...root}}
-      >
+      <Paper component="ul" sx={{ ...root }}>
         <li>
-          <Chip label="Genres" sx={{...chip}} color="primary" />
+          <Chip label="Genres" sx={{ ...chip }} color="primary" />
         </li>
         {movie.genres.map((g) => (
           <li key={g.name}>
-            <Chip label={g.name} sx={{...chip}} />
+            <Chip label={g.name} sx={{ ...chip }} />
           </li>
         ))}
       </Paper>
 
-      <Paper component="ul" sx={{...root}}>
+      <Paper component="ul" sx={{ ...root }}>
         <Chip icon={<AccessTimeIcon />} label={`${movie.runtime} min.`} />
-        <Chip
-          icon={<MonetizationIcon />}
-          label={`${movie.revenue.toLocaleString()}`}
-        />
-        <Chip
-          icon={<StarRate />}
-          label={`${movie.vote_average} (${movie.vote_count})`}
-        />
-        <Chip 
-          icon={<LanguageIcon />} 
-          label={`Original Language: ${movie.original_language}`} sx={{...chip}} 
-        />
+        <Chip icon={<MonetizationIcon />} label={`${movie.revenue.toLocaleString()}`} />
+        <Chip icon={<StarRate />} label={`${movie.vote_average} (${movie.vote_count})`} />
+        <Chip icon={<LanguageIcon />} label={`Original Language: ${movie.original_language}`} sx={{ ...chip }} />
         <Chip label={`Released: ${movie.release_date}`} />
       </Paper>
 
-      <Paper component="ul" sx={{...root}}>
+      <Paper component="ul" sx={{ ...root }}>
         <li>
-          <Chip label="Production Countries" sx={{...chip}} color="primary" />
+          <Chip label="Production Countries" sx={{ ...chip }} color="primary" />
         </li>
         {movie.production_countries.map((country) => (
           <li key={country.name}>
-            <Chip label={country.name} sx={{...chip}} />
+            <Chip label={country.name} sx={{ ...chip }} />
           </li>
         ))}
       </Paper>
+
+      {/* Add navigation links */}
+      <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-around" }}>
+        <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: 'none' }}>
+          <Chip label="View Recommendations" color="secondary" sx={{ ...chip }} />
+        </Link>
+        <Link to={`/movie/${movie.id}/credits`} style={{ textDecoration: 'none' }}>
+          <Chip label="View Credits" color="secondary" sx={{ ...chip }} />
+        </Link>
+      </div>
 
       <Fab
         color="secondary"
