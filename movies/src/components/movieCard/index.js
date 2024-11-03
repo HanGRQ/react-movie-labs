@@ -61,7 +61,6 @@ export default function MovieCard({ movie, action, isFavoritePage = false }) {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        {/* 使用 action 动态渲染图标 */}
         {action(movie)}
 
         <Link to={`/movies/${movie.id}`}>

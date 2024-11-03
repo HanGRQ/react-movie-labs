@@ -133,6 +133,27 @@ export const getMovie = (args) => {
       throw error;
     });
   };
+
+  export const getMovieRecommendations = async (id) => {
+    const response = await fetch(
+      `https://api.example.com/movie/${id}/recommendations`
+    );
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  };
+  
+  export const getMovieCredits = async (id) => {
+    const response = await fetch(
+      `https://api.example.com/movie/${id}/credits`
+    );
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  };
+  
   
   
   

@@ -4,10 +4,9 @@ import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
-import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; // 如果有单独的AddToWatchlistIcon组件
-import WriteReviewIcon from "../components/cardIcons/writeReview";
+import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; 
 
-const HomePage = (props) => {
+const HomePage = () => {
   const { data, error, isLoading, isError } = useQuery('discover', getMovies);
 
   if (isLoading) {
@@ -20,7 +19,6 @@ const HomePage = (props) => {
 
   const movies = data.results;
 
-  // Redundant, but necessary to avoid app crashing.
   const favorites = movies.filter(m => m.favorite);
   localStorage.setItem('favorites', JSON.stringify(favorites));
 
@@ -32,8 +30,7 @@ const HomePage = (props) => {
         return (
           <>
             <AddToFavoritesIcon movie={movie} />
-            <AddToWatchlistIcon movie={movie} />
-            <WriteReviewIcon movie={movie} /> 
+            <AddToWatchlistIcon movie={movie} /> 
           </>
         );
       }}

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { getUpcomingMovies } from "../api/tmdb-api";
 import Spinner from '../components/spinner';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-
+import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; 
 const UpcomingMoviesPage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +27,13 @@ const UpcomingMoviesPage = () => {
     <PageTemplate
       title="Upcoming Movies"
       movies={movies}
-      action={() => <PlaylistAddIcon />}
+      action={(movie) => {
+        return (
+          <>
+            <AddToWatchlistIcon movie={movie} /> 
+          </>
+        );
+      }}
     />
   );
 };
