@@ -134,25 +134,77 @@ export const getMovie = (args) => {
     });
   };
 
-  export const getMovieRecommendations = async (id) => {
+  export const getMovieRecommendations = async ({ queryKey }) => {
+    const [, { id }] = queryKey;
     const response = await fetch(
-      `https://api.example.com/movie/${id}/recommendations`
+      `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.REACT_APP_TMDB_KEY}`
     );
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      return response.json().then((error) => {
+        throw new Error(error.status_message || "Something went wrong");
+      });
     }
     return response.json();
   };
   
-  export const getMovieCredits = async (id) => {
+  export const getMovieCredits = async ({ queryKey }) => {
+    const [, { id }] = queryKey;
     const response = await fetch(
-      `https://api.example.com/movie/${id}/credits`
+      `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_TMDB_KEY}`
     );
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      return response.json().then((error) => {
+        throw new Error(error.status_message || "Something went wrong");
+      });
     }
     return response.json();
   };
+
+  export const getSimilarMovies = ({ queryKey }) => {
+    const [, idPart] = queryKey;
+    const { id } = idPart;
+  
+    return fetch(
+      `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
+    )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+  };
+
+  export const getActorDetails = (actorId) => {
+    return fetch(
+      `https://api.themoviedb.org/3/person/${actorId}?api_key=${process.env.REACT_APP_TMDB_KEY}`
+    ).then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch actor details");
+      }
+      return response.json();
+    });
+  };
+  
+  export const getActorMovies = (actorId) => {
+    return fetch(
+      `https://api.themoviedb.org/3/person/${actorId}/movie_credits?api_key=${process.env.REACT_APP_TMDB_KEY}`
+    ).then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch actor movies");
+      }
+      return response.json();
+    });
+  };
+  
+  
+  
+  
   
   
   

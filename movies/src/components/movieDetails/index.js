@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react"; 
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -11,19 +10,25 @@ import Typography from "@mui/material/Typography";
 import Drawer from "@mui/material/Drawer";
 import LanguageIcon from "@mui/icons-material/Language";
 import MovieReviews from "../movieReviews";
+import MovieRecommendations from "../movieRecommendations"; 
+import MovieCredits from "../movieCredits"; 
+import MovieSimilar from "../movieSimilar";
 
 const root = {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    listStyle: "none",
-    padding: 1.5,
-    margin: 0,
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap",
+  listStyle: "none",
+  padding: 1.5,
+  margin: 0,
 };
 const chip = { margin: 0.5 };
 
-const MovieDetails = ({ movie }) => {  
+const MovieDetails = ({ movie }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [recommendationsOpen, setRecommendationsOpen] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
+  const [similarOpen, setSimilarOpen] = useState(false);
 
   return (
     <>
@@ -65,31 +70,86 @@ const MovieDetails = ({ movie }) => {
         ))}
       </Paper>
 
-      {/* Add navigation links */}
-      <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-around" }}>
-        <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: 'none' }}>
-          <Chip label="View Recommendations" color="secondary" sx={{ ...chip }} />
-        </Link>
-        <Link to={`/movie/${movie.id}/credits`} style={{ textDecoration: 'none' }}>
-          <Chip label="View Credits" color="secondary" sx={{ ...chip }} />
-        </Link>
-      </div>
-
+      {/* Floating Buttons */}
       <Fab
         color="secondary"
         variant="extended"
         onClick={() => setDrawerOpen(true)}
         sx={{
           position: 'fixed',
-          bottom: '1em',
-          right: '1em'
+          bottom: '10em',
+          right: '1em',
+          backgroundColor: 'purple', 
+          height: '30px',
         }}
       >
         <NavigationIcon />
         Reviews
       </Fab>
+
+      <Fab
+        color="secondary"
+        variant="extended"
+        onClick={() => setCreditsOpen(true)}
+        sx={{
+          position: 'fixed',
+          bottom: '7em',
+          right: '1em',
+          backgroundColor: 'purple', 
+          height: '30px',
+        }}
+      >
+        <NavigationIcon />
+        Credits
+      </Fab>
+
+      <Fab
+        color="secondary"
+        variant="extended"
+        onClick={() => setSimilarOpen(true)}
+        sx={{
+          position: 'fixed',
+          bottom: '4em',
+          right: '1em',
+          backgroundColor: 'purple', 
+          height: '30px',
+        }}
+      >
+        <NavigationIcon />
+        Similar
+      </Fab>
+
+      <Fab
+        color="secondary"
+        variant="extended"
+        onClick={() => setRecommendationsOpen(true)}
+        sx={{
+          position: 'fixed',
+          bottom: '1em',
+          right: '1em',
+          backgroundColor: 'purple', 
+          height: '30px',
+        }}
+      >
+        <NavigationIcon />
+        Recommendations
+      </Fab>
+
+      {/* Drawers */}
       <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <MovieReviews movie={movie} />
+      </Drawer>
+
+      <Drawer anchor="top" open={creditsOpen} onClose={() => setCreditsOpen(false)}>
+        <MovieCredits movie={movie} />
+      </Drawer>
+
+      <Drawer anchor="top" open={similarOpen} onClose={() => setSimilarOpen(false)}>
+        <MovieSimilar movie={movie} />
+      </Drawer>
+
+      <Drawer anchor="top" open={recommendationsOpen} onClose={() => setRecommendationsOpen(false)}>
+        <MovieRecommendations movie={movie} />
       </Drawer>
     </>
   );
