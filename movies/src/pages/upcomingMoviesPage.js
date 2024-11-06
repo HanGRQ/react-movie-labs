@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
-import PageTemplate from "../components/templateMovieListPage";
+import React from "react";
 import { getUpcomingMovies } from "../api/tmdb-api";
+import PageTemplate from '../components/templateMovieListPage';
+import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; 
+
 const UpcomingMoviesPage = () => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading, isError } = useQuery('upcoming', getUpcomingMovies);
 
-  useEffect(() => {
-    getUpcomingMovies()
-      .then((movies) => {
-        setMovies(movies);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching upcoming movies:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
   }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  const movies = data; 
 
   return (
     <PageTemplate
@@ -30,6 +26,7 @@ const UpcomingMoviesPage = () => {
       action={(movie) => {
         return (
           <>
+            <AddToFavoritesIcon movie={movie} />
             <AddToWatchlistIcon movie={movie} /> 
           </>
         );

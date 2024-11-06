@@ -86,6 +86,7 @@ export const getMovie = (args) => {
       throw error
    });
   };
+  
 
   export const getUpcomingMovies = async () => {
     const response = await fetch(

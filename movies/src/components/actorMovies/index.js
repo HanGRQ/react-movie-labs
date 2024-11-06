@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useQuery } from "react-query";
-import { getActorMovies } from "../../api/tmdb-api";  // 假设此 API 已存在
+import { getActorMovies } from "../../api/tmdb-api";  
 import Spinner from "../spinner";
 
 export default function ActorMovies({ actorId }) {

@@ -5,9 +5,9 @@ import Chip from "@mui/material/Chip";
 import Drawer from "@mui/material/Drawer";
 import Fab from "@mui/material/Fab";
 import NavigationIcon from "@mui/icons-material/Navigation";
-import ActorMovies from "../actorMovies";  // 展示演员参与的电影组件
+import ActorMovies from "../actorMovies";  
 import { useQuery } from "react-query";
-import { getActorDetails } from "../../api/tmdb-api"; // 假设 API 已存在
+import { getActorDetails } from "../../api/tmdb-api"; 
 import Spinner from "../spinner";
 
 const root = {

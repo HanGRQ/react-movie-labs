@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from "react";
-import PageTemplate from "../components/templateMovieListPage";
+import React from "react";
 import { getNowPlayingMovies } from "../api/tmdb-api";
+import PageTemplate from '../components/templateMovieListPage';
+import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import AddToWatchlistIcon from '../components/cardIcons/addToWatchlist'; 
 
 const NowPlayingMoviesPage = () => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading, isError } = useQuery('nowPlaying', getNowPlayingMovies);
 
-  useEffect(() => {
-    getNowPlayingMovies()
-      .then((data) => {
-        setMovies(data.results);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching now playing movies:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
   }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  const movies = data.results;
 
   return (
     <PageTemplate

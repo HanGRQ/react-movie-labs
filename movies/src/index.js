@@ -15,7 +15,7 @@ import TrendingMoviesPage from './pages/trendingMoviesPage';
 import NowPlayingMoviesPage from './pages/nowPlayingMoviesPage';
 import MovieRecommendationsPage from "./pages/movieRecommendationsPage";
 import MovieCreditsPage from "./pages/movieCreditsPage";
-import ActorDetails from "./pages/actorDetails"; // 导入路径根据你的项目结构调整
+import ActorDetails from "./pages/actorDetails"; 
 
 
 const queryClient = new QueryClient({
