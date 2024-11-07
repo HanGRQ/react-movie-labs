@@ -36,7 +36,7 @@ const App = () => {
         <MoviesContextProvider>
           <Routes>
             <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
-            <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
+            <Route path="/reviews/:movieId/:reviewId" element={<MovieReviewPage />} />
             <Route path="/movies/:id" element={<MoviePage />} />
             <Route path="/movie/:id/recommendations" element={<MovieRecommendationsPage />} />
             <Route path="/movie/:id/credits" element={<MovieCreditsPage />} />

@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,14 +10,14 @@ import { Link } from "react-router-dom";
 import { getMovieReviews } from "../../api/tmdb-api";
 import { excerpt } from "../../util";
 import { useQuery } from "react-query";
-import Spinner from '../spinner'
+import Spinner from "../spinner";
 
 export default function MovieReviews({ movie }) {
-  const { data , error, isLoading, isError } = useQuery(
+  const { data, error, isLoading, isError } = useQuery(
     ["reviews", { id: movie.id }],
     getMovieReviews
   );
-  
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -24,15 +25,15 @@ export default function MovieReviews({ movie }) {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  
+
   const reviews = data.results;
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{minWidth: 550}} aria-label="reviews table">
+      <Table sx={{ minWidth: 550 }} aria-label="reviews table">
         <TableHead>
           <TableRow>
-            <TableCell >Author</TableCell>
+            <TableCell>Author</TableCell>
             <TableCell align="center">Excerpt</TableCell>
             <TableCell align="right">More</TableCell>
           </TableRow>
@@ -43,13 +44,13 @@ export default function MovieReviews({ movie }) {
               <TableCell component="th" scope="row">
                 {r.author}
               </TableCell>
-              <TableCell >{excerpt(r.content)}</TableCell>
-              <TableCell >
-              <Link
-                  to={`/reviews/${r.id}`}
+              <TableCell>{excerpt(r.content)}</TableCell>
+              <TableCell>
+                <Link
+                  to={`/reviews/${movie.id}/${r.id}`}
                   state={{
-                      review: r,
-                      movie: movie,
+                    review: r,
+                    movie: movie,
                   }}
                 >
                   Full Review
