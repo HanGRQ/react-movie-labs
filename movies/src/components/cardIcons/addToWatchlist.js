@@ -12,8 +12,12 @@ const AddToWatchlistIcon = ({ movie }) => {
   };
 
   return (
-    <IconButton aria-label="add to watchlist" onClick={handleAddToWatchlist}>
-      <PlaylistAddIcon color="primary" fontSize="large" />
+    <IconButton
+      aria-label="add to watchlist"
+      onClick={handleAddToWatchlist}
+      color="primary"
+    >
+      <PlaylistAddIcon />
     </IconButton>
   );
 };

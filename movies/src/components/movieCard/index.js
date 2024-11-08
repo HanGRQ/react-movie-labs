@@ -18,6 +18,7 @@ import { MoviesContext } from "../../contexts/moviesContext";
 export default function MovieCard({ movie, action, isFavoritePage = false }) {
   const { favorites } = useContext(MoviesContext);
 
+  // 检查是否已在收藏夹中
   const isFavorite = favorites.find((id) => id === movie.id) !== undefined;
 
   return (
@@ -32,7 +33,7 @@ export default function MovieCard({ movie, action, isFavoritePage = false }) {
         }
         title={
           <Typography variant="h5" component="p">
-            {movie.title}{" "}
+            {movie.title}
           </Typography>
         }
       />
@@ -55,14 +56,13 @@ export default function MovieCard({ movie, action, isFavoritePage = false }) {
           <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <StarRateIcon fontSize="small" />
-              {"  "} {movie.vote_average}{" "}
+              {"  "} {movie.vote_average}
             </Typography>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
         {action(movie)}
-
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...

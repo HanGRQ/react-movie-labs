@@ -23,16 +23,19 @@ const SiteHeader = () => {
   
   const navigate = useNavigate();
 
+  // 添加 Watchlist 到菜单选项
   const menuOptions = [
     { label: "Home", path: "/" },
     { label: "Favorites", path: "/movies/favorites" },
     { label: "Upcoming", path: "/movies/upcoming" },
     { label: "Trending", path: "/movies/trending" },      
-    { label: "Now Playing", path: "/movies/now_playing" } 
+    { label: "Now Playing", path: "/movies/now_playing" },
+    { label: "Watchlist", path: "/watchlist" }, // 新增 Watchlist 链接
   ];
 
   const handleMenuSelect = (pageURL) => {
     navigate(pageURL, { replace: true });
+    setAnchorEl(null); // 关闭菜单（移动端）
   };
 
   const handleMenu = (event) => {

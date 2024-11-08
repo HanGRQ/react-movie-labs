@@ -21,7 +21,6 @@ const formControl = {
 };
 
 const languageOptions = [
-  { label: "All", value: "" },
   { label: "English", value: "en" },
   { label: "Spanish", value: "es" },
   { label: "French", value: "fr" },
@@ -31,7 +30,6 @@ const languageOptions = [
 ];
 
 const starRatingOptions = [
-  { label: "All", value: "" },
   { label: "1+", value: 1 },
   { label: "2+", value: 2 },
   { label: "3+", value: 3 },
@@ -44,7 +42,6 @@ const starRatingOptions = [
 ];
 
 const releaseYearOptions = [
-  { label: "All", value: "" },
   { label: "2021 Before", value: "2021 Before" },
   { label: "2022", value: "2022" },
   { label: "2023", value: "2023" },
@@ -59,6 +56,9 @@ export default function FilterMoviesCard(props) {
   if (isError) return <h1>{error.message}</h1>;
 
   const genres = data.genres;
+  if (genres[0].name !== "All"){
+    genres.unshift({ id: "0", name: "All" });
+  }
 
   const handleChange = (e, type, value) => {
     e.preventDefault();
@@ -100,9 +100,6 @@ export default function FilterMoviesCard(props) {
             onChange={handleGenreChange}
             label="Genre"
           >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
             {genres.map((genre) => {
               return (
                 <MenuItem key={genre.id} value={genre.id}>
@@ -115,13 +112,20 @@ export default function FilterMoviesCard(props) {
 
         {/* 语言筛选 */}
         <FormControl sx={{ ...formControl }}>
-          <InputLabel id="language-label">Language</InputLabel>
+          <InputLabel id="language-label" shrink>Language</InputLabel>
           <Select
             labelId="language-label"
             id="language-select"
             value={props.languageFilter|| ""}
             onChange={handleLanguageChange}
+            displayEmpty
+            renderValue={(selected) => {
+              return selected === "" ? "All" : languageOptions.find((lang) => lang.value === selected)?.label;
+            }}
           >
+            <MenuItem value="">
+              All
+            </MenuItem>
             {languageOptions.map((lang) => (
               <MenuItem key={lang.value} value={lang.value}>
                 {lang.label}
@@ -132,13 +136,20 @@ export default function FilterMoviesCard(props) {
 
         {/* 评分筛选 */}
         <FormControl sx={{ ...formControl }}>
-          <InputLabel id="starRate-label">Star Rating</InputLabel>
+          <InputLabel id="starRate-label" shrink>Star Rating</InputLabel>
           <Select
             labelId="starRate-label"
             id="starRate-select"
             value={props.starRateFilter|| ""}
             onChange={handleStarRateChange}
+            displayEmpty
+            renderValue={(selected) => {
+              return selected === "" ? "All" : starRatingOptions.find((option) => option.value === selected)?.label;
+            }}
           >
+            <MenuItem value="">
+              All
+            </MenuItem>
             {starRatingOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -149,13 +160,20 @@ export default function FilterMoviesCard(props) {
 
         {/* 发布年份筛选 */}
         <FormControl sx={{ ...formControl }}>
-          <InputLabel id="releaseYear-label">Release Year</InputLabel>
+          <InputLabel id="releaseYear-label" shrink>Release Year</InputLabel>
           <Select
             labelId="releaseYear-label"
             id="releaseYear-select"
             value={props.releaseYearFilter|| ""}
             onChange={handleReleaseYearChange}
+            displayEmpty
+            renderValue={(selected) => {
+              return selected === "" ? "All" : releaseYearOptions.find((option) => option.value === selected)?.label;
+            }}
           >
+            <MenuItem value="">
+              All
+            </MenuItem>
             {releaseYearOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
