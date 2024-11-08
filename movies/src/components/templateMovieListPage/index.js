@@ -3,6 +3,7 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid2";
+import Pagination from "@mui/material/Pagination";
 
 function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
@@ -10,6 +11,8 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [languageFilter, setLanguageFilter] = useState("");
   const [starRateFilter, setStarRateFilter] = useState("");
   const [releaseYearFilter, setReleaseYearFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 12;
   
   const genreId = Number(genreFilter);
 
@@ -33,6 +36,16 @@ function MovieListPageTemplate({ movies, title, action }) {
     })
     .filter((m) => (languageFilter ? m.original_language === languageFilter : true));
 
+  // 分页处理
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedMovies = displayedMovies.slice(startIndex, endIndex);
+
+  // 处理分页变更
+  const handleChangePage = (event, value) => {
+    setPage(value);
+  };
+    
   const handleChange = (type, value) => {
     if (type === "name") setNameFilter(value);
     else if (type === "genre") setGenreFilter(value);
@@ -42,14 +55,14 @@ function MovieListPageTemplate({ movies, title, action }) {
   };
 
   return (
-    <Grid container>
+    <Grid container spacing={2} sx={{ flexGrow: 1, padding: "20px" }}>
       <Grid size={12}>
         <Header title={title} />
       </Grid>
-      <Grid container sx={{flex: "1 1 500px"}}>
+      <Grid container spacing={2}>
         <Grid 
           key="find" 
-          size={{xs: 12, sm: 6, md: 4, lg: 3, xl: 2}} 
+          size={{xs: 12, sm: 5, md: 3, lg: 3}} 
           sx={{padding: "20px"}}
         >
           <FilterCard
@@ -61,7 +74,32 @@ function MovieListPageTemplate({ movies, title, action }) {
             releaseYearFilter={releaseYearFilter}
           />
         </Grid>
-        <MovieList action={action} movies={displayedMovies}></MovieList>
+
+        <Grid size={{xs: 12, sm: 9, md: 9, lg: 9}}>
+          <MovieList action={action} movies={paginatedMovies}></MovieList>
+        </Grid>
+
+        <Grid container justifyContent="center" alignItems="center"
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "white",
+            padding: "10px",
+            boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
+            zIndex: 1000,
+          }}
+        >
+          <Pagination
+            count={Math.ceil(displayedMovies.length / itemsPerPage)}
+            page={page}
+            onChange={handleChangePage}
+            color="primary"
+            size="large"
+            variant="outlined"
+          />
+        </Grid>
       </Grid>
     </Grid>
   );
