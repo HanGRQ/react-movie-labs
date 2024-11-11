@@ -11,24 +11,50 @@ import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import backgroundImage from "../images/background.png"; // 引入背景图片
+import backgroundImage from "../images/Background.jpg";
+import welcomeImage from "../images/welcome.png"; // 引入 welcome.png
 
 // 自定义样式，用于加粗 "Login" 标题
 const StyledTypography = styled(Typography)({
   fontWeight: "bold",
   fontSize: "2.5rem",
-  fontFamily: "Brush Script MT, cursive", // 示例字体，可根据需求更改
+  fontFamily: "Brush Script MT, cursive",
 });
 
 // 为登录内容创建边框样式的 Box 组件
 const LoginContainer = styled(Box)({
-  border: "2px solid black", // 边框颜色和粗细
-  borderRadius: "15px", // 圆角
-  padding: "20px", // 内边距
-  maxWidth: "400px", // 最大宽度
-  width: "100%", // 宽度
-  backgroundColor: "white", // 背景颜色
+  border: "2px solid black",
+  borderRadius: "15px",
+  padding: "20px",
+  maxWidth: "400px",
+  width: "100%",
+  backgroundColor: "white",
   boxSizing: "border-box",
+});
+
+// 背景样式
+const BackgroundContainer = styled(Box)({
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundImage: `url(${backgroundImage})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  zIndex: -1,
+});
+
+// 左上角图片样式
+const WelcomeImage = styled("img")({
+  position: "absolute",
+  top: "20px",
+  left: "30px",
+  width: "600px",
+  height: "600px",
+  transform: "rotate(-45deg)", // 逆时针旋转 45 度
+  zIndex: 10,
 });
 
 const LoginPage = () => {
@@ -38,7 +64,6 @@ const LoginPage = () => {
   const [isRegister, setIsRegister] = useState(false);
   const navigate = useNavigate();
 
-  // 如果用户已经登录，直接跳转到 HomePage
   useEffect(() => {
     if (user) {
       navigate("/", { replace: true });
@@ -56,96 +81,96 @@ const LoginPage = () => {
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      direction="column"
-      sx={{
-        minHeight: "100vh",
-        backgroundImage: `url(${backgroundImage})`, // 设置背景图片
-        backgroundPosition: "left bottom", // 图片位置
-        backgroundRepeat: "no-repeat", // 不重复
-        backgroundSize: "contain", // 适应大小
-      }}
-    >
-      <LoginContainer>
-        <StyledTypography variant="h4" component="h1" align="center" gutterBottom>
-          Login
-        </StyledTypography>
-        {user ? (
-          <>
-            <Avatar alt={user.displayName} src={user.photoURL} sx={{ width: 56, height: 56, mb: 2, mx: "auto" }} />
-            <Typography variant="h6" component="div" align="center">
-              Welcome, {user.displayName || user.email}
-            </Typography>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<LogoutIcon />}
-              onClick={logout}
-              sx={{ mt: 2 }}
-            >
-              Logout
-            </Button>
-          </>
-        ) : (
-          <>
-            <form onSubmit={isRegister ? handleEmailRegister : handleEmailLogin}>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{ mb: 2 }}
-              />
+    <>
+      {/* 背景容器 */}
+      <BackgroundContainer />
+
+      {/* 左上角图片 */}
+      <WelcomeImage src={welcomeImage} alt="Welcome" />
+
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        direction="column"
+        sx={{ minHeight: "100vh" }}
+      >
+        <LoginContainer>
+          <StyledTypography variant="h4" component="h1" align="center" gutterBottom>
+            Login
+          </StyledTypography>
+          {user ? (
+            <>
+              <Avatar alt={user.displayName} src={user.photoURL} sx={{ width: 56, height: 56, mb: 2, mx: "auto" }} />
+              <Typography variant="h6" component="div" align="center">
+                Welcome, {user.displayName || user.email}
+              </Typography>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<LogoutIcon />}
+                onClick={logout}
+                sx={{ mt: 2 }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <form onSubmit={isRegister ? handleEmailRegister : handleEmailLogin}>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                >
+                  {isRegister ? "Register" : "Login"}
+                </Button>
+              </form>
+
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => setIsRegister(!isRegister)}
+              >
+                {isRegister ? "Already have an account? Login" : "Don't have an account? Register"}
+              </Button>
+
+              <Divider sx={{ width: "100%", mt: 1, mb: 1 }} />
+
               <Button
                 variant="contained"
                 color="primary"
-                type="submit"
-                fullWidth
+                startIcon={<GoogleIcon />}
+                onClick={signInWithGoogle}
                 sx={{ mb: 1 }}
+                fullWidth
               >
-                {isRegister ? "Register" : "Login"}
+                Login with Google
               </Button>
-            </form>
-
-            <Button
-              variant="text"
-              color="primary"
-              onClick={() => setIsRegister(!isRegister)}
-            >
-              {isRegister ? "Already have an account? Login" : "Don't have an account? Register"}
-            </Button>
-
-            {/* 分割线 */}
-            <Divider sx={{ width: "100%", mt: 1, mb: 1 }} />
-
-            {/* Google 登录按钮放在最下方 */}
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<GoogleIcon />}
-              onClick={signInWithGoogle}
-              sx={{ mb: 1 }}
-              fullWidth
-            >
-              Login with Google
-            </Button>
-          </>
-        )}
-      </LoginContainer>
-    </Grid>
+            </>
+          )}
+        </LoginContainer>
+      </Grid>
+    </>
   );
 };
 
