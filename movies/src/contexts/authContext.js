@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 export const AuthContext = createContext();
@@ -25,6 +32,28 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // 邮箱和密码注册
+  const registerWithEmail = async (email, password) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+      console.log("User registered:", result.user);
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
+  };
+
+  // 邮箱和密码登录
+  const signInWithEmail = async (email, password) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+      console.log("User signed in:", result.user);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
+
   // 用户注销
   const logout = async () => {
     await signOut(auth);
@@ -41,7 +70,16 @@ const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signInWithGoogle,
+        registerWithEmail,
+        signInWithEmail,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

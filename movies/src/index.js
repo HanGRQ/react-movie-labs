@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Navigate, Routes, useLocation } from "react-router-dom";
 import HomePage from "./pages/homePage";
 import MoviePage from "./pages/movieDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
@@ -30,9 +30,38 @@ const queryClient = new QueryClient({
   },
 });
 
+// PrivateRoute component to protect routes
 const PrivateRoute = ({ element }) => {
   const { user } = useAuth();
-  return user ? element : <Navigate to="/login" />;
+  return user ? element : <Navigate to="/login" replace />;
+};
+
+// AppContent component to conditionally render SiteHeader based on location
+const AppContent = () => {
+  const location = useLocation();
+
+  return (
+    <>
+      {/* Only render SiteHeader if not on login page */}
+      {location.pathname !== "/login" && <SiteHeader />}
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<PrivateRoute element={<HomePage />} />} />
+        <Route path="/movies/favorites" element={<PrivateRoute element={<FavoriteMoviesPage />} />} />
+        <Route path="/reviews/:movieId/:reviewId" element={<PrivateRoute element={<MovieReviewPage />} />} />
+        <Route path="/movies/:id" element={<PrivateRoute element={<MoviePage />} />} />
+        <Route path="/movie/:id/recommendations" element={<PrivateRoute element={<MovieRecommendationsPage />} />} />
+        <Route path="/movie/:id/credits" element={<PrivateRoute element={<MovieCreditsPage />} />} />
+        <Route path="/reviews/form" element={<PrivateRoute element={<AddMovieReviewPage />} />} />
+        <Route path="/movies/upcoming" element={<PrivateRoute element={<UpcomingMoviesPage />} />} />
+        <Route path="/movies/trending" element={<PrivateRoute element={<TrendingMoviesPage />} />} />
+        <Route path="/movies/now_playing" element={<PrivateRoute element={<NowPlayingMoviesPage />} />} />
+        <Route path="/watchlist" element={<PrivateRoute element={<WatchlistPage />} />} />
+        <Route path="/actor/:id" element={<PrivateRoute element={<ActorDetails />} />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </>
+  );
 };
 
 const App = () => {
@@ -41,23 +70,7 @@ const App = () => {
       <BrowserRouter>
         <AuthContextProvider>
           <MoviesContextProvider>
-          <SiteHeader />
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<PrivateRoute element={<HomePage />} />} />
-              <Route path="/movies/favorites" element={<PrivateRoute element={<FavoriteMoviesPage />} />} />
-              <Route path="/reviews/:movieId/:reviewId" element={<PrivateRoute element={<MovieReviewPage />} />} />
-              <Route path="/movies/:id" element={<PrivateRoute element={<MoviePage />} />} />
-              <Route path="/movie/:id/recommendations" element={<PrivateRoute element={<MovieRecommendationsPage />} />} />
-              <Route path="/movie/:id/credits" element={<PrivateRoute element={<MovieCreditsPage />} />} />
-              <Route path="/reviews/form" element={<PrivateRoute element={<AddMovieReviewPage />} />} />
-              <Route path="/movies/upcoming" element={<PrivateRoute element={<UpcomingMoviesPage />} />} />
-              <Route path="/movies/trending" element={<PrivateRoute element={<TrendingMoviesPage />} />} />
-              <Route path="/movies/now_playing" element={<PrivateRoute element={<NowPlayingMoviesPage />} />} />
-              <Route path="/watchlist" element={<PrivateRoute element={<WatchlistPage />} />} />
-              <Route path="/actor/:id" element={<PrivateRoute element={<ActorDetails />} />} />
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
+            <AppContent />
           </MoviesContextProvider>
         </AuthContextProvider>
       </BrowserRouter>
