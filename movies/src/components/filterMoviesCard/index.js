@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,15 +8,14 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg';
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner';
+import Spinner from "../spinner";
 
 const formControl = {
   margin: 1,
   minWidth: "90%",
-  backgroundColor: "rgb(255, 255, 255)"
+  backgroundColor: "rgb(255, 255, 255)",
 };
 
 const languageOptions = [
@@ -26,7 +24,7 @@ const languageOptions = [
   { label: "French", value: "fr" },
   { label: "German", value: "de" },
   { label: "Chinese", value: "zh" },
-  { label: "Tagalog", value: "tl" }, 
+  { label: "Tagalog", value: "tl" },
 ];
 
 const starRatingOptions = [
@@ -38,7 +36,7 @@ const starRatingOptions = [
   { label: "6+", value: 6 },
   { label: "7+", value: 7 },
   { label: "8+", value: 8 },
-  { label: "9+", value: 9 }
+  { label: "9+", value: 9 },
 ];
 
 const releaseYearOptions = [
@@ -48,7 +46,6 @@ const releaseYearOptions = [
   { label: "2024", value: "2024" },
 ];
 
-
 export default function FilterMoviesCard(props) {
   const { data, error, isLoading, isError } = useQuery("genres", getGenres);
 
@@ -56,13 +53,13 @@ export default function FilterMoviesCard(props) {
   if (isError) return <h1>{error.message}</h1>;
 
   const genres = data.genres;
-  if (genres[0].name !== "All"){
+  if (genres[0].name !== "All") {
     genres.unshift({ id: "0", name: "All" });
   }
 
   const handleChange = (e, type, value) => {
     e.preventDefault();
-    props.onUserInput(type, value); 
+    props.onUserInput(type, value);
   };
 
   const handleTextChange = (e) => handleChange(e, "name", e.target.value);
@@ -91,7 +88,7 @@ export default function FilterMoviesCard(props) {
         />
 
         {/* 类型筛选 */}
-        <FormControl sx={{...formControl}}>
+        <FormControl sx={{ ...formControl }}>
           <InputLabel id="genre-label">Genre</InputLabel>
           <Select
             labelId="genre-label"
@@ -100,13 +97,11 @@ export default function FilterMoviesCard(props) {
             onChange={handleGenreChange}
             label="Genre"
           >
-            {genres.map((genre) => {
-              return (
-                <MenuItem key={genre.id} value={genre.id}>
-                  {genre.name}
-                </MenuItem>
-              );
-            })}
+            {genres.map((genre) => (
+              <MenuItem key={genre.id} value={genre.id}>
+                {genre.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -116,16 +111,14 @@ export default function FilterMoviesCard(props) {
           <Select
             labelId="language-label"
             id="language-select"
-            value={props.languageFilter|| ""}
+            value={props.languageFilter || ""}
             onChange={handleLanguageChange}
             displayEmpty
             renderValue={(selected) => {
               return selected === "" ? "All" : languageOptions.find((lang) => lang.value === selected)?.label;
             }}
           >
-            <MenuItem value="">
-              All
-            </MenuItem>
+            <MenuItem value="">All</MenuItem>
             {languageOptions.map((lang) => (
               <MenuItem key={lang.value} value={lang.value}>
                 {lang.label}
@@ -140,16 +133,14 @@ export default function FilterMoviesCard(props) {
           <Select
             labelId="starRate-label"
             id="starRate-select"
-            value={props.starRateFilter|| ""}
+            value={props.starRateFilter || ""}
             onChange={handleStarRateChange}
             displayEmpty
             renderValue={(selected) => {
               return selected === "" ? "All" : starRatingOptions.find((option) => option.value === selected)?.label;
             }}
           >
-            <MenuItem value="">
-              All
-            </MenuItem>
+            <MenuItem value="">All</MenuItem>
             {starRatingOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -164,16 +155,14 @@ export default function FilterMoviesCard(props) {
           <Select
             labelId="releaseYear-label"
             id="releaseYear-select"
-            value={props.releaseYearFilter|| ""}
+            value={props.releaseYearFilter || ""}
             onChange={handleReleaseYearChange}
             displayEmpty
             renderValue={(selected) => {
               return selected === "" ? "All" : releaseYearOptions.find((option) => option.value === selected)?.label;
             }}
           >
-            <MenuItem value="">
-              All
-            </MenuItem>
+            <MenuItem value="">All</MenuItem>
             {releaseYearOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -182,8 +171,6 @@ export default function FilterMoviesCard(props) {
           </Select>
         </FormControl>
       </CardContent>
-
-      <CardMedia sx={{ height: 300 }} image={img} title="Filter" />
     </Card>
   );
 }

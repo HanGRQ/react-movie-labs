@@ -4,6 +4,11 @@ import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid2";
 import Pagination from "@mui/material/Pagination";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Slide from "@mui/material/Slide";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
@@ -12,58 +17,80 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [starRateFilter, setStarRateFilter] = useState("");
   const [releaseYearFilter, setReleaseYearFilter] = useState("");
   const [page, setPage] = useState(1);
-  const itemsPerPage = 12;
-  
+  const [filterVisible, setFilterVisible] = useState(false);
+  const itemsPerPage = 8;
+  const layoutConfig = { xs: 12, sm: 6, md: 4, lg: 3 };
+
   const genreId = Number(genreFilter);
 
   let displayedMovies = movies
-    .filter((m) => {
-      return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
-    })
-    .filter((m) => {
-      return genreId > 0 ? m.genre_ids.includes(genreId) : true;
-    })
-    .filter((m) => {
-      return starRateFilter ? m.vote_average >= Number(starRateFilter) : true;
-    })
-    .filter((m) => {
-      if (releaseYearFilter === "2021 Before") {
-        return new Date(m.release_date).getFullYear() < 2021;
-      } else if (releaseYearFilter) {
-        return new Date(m.release_date).getFullYear() === parseInt(releaseYearFilter);
-      }
-      return true; 
-    })
+    .filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()))
+    .filter((m) => (genreId > 0 ? m.genre_ids.includes(genreId) : true))
+    .filter((m) => (starRateFilter ? m.vote_average >= Number(starRateFilter) : true))
+    .filter((m) => (releaseYearFilter ? m.release_date.startsWith(releaseYearFilter) : true))
     .filter((m) => (languageFilter ? m.original_language === languageFilter : true));
 
-  // 分页处理
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedMovies = displayedMovies.slice(startIndex, endIndex);
 
-  // 处理分页变更
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-    
+
   const handleChange = (type, value) => {
-    if (type === "name") setNameFilter(value);
-    else if (type === "genre") setGenreFilter(value);
-    else if (type === "language") setLanguageFilter(value);
-    else if (type === "starRate") setStarRateFilter(value);
-    else if (type === "releaseYear") setReleaseYearFilter(value);
+    switch (type) {
+      case "name":
+        setNameFilter(value);
+        break;
+      case "genre":
+        setGenreFilter(value);
+        break;
+      case "language":
+        setLanguageFilter(value);
+        break;
+      case "starRate":
+        setStarRateFilter(value);
+        break;
+      case "releaseYear":
+        setReleaseYearFilter(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const toggleFilterVisibility = () => {
+    setFilterVisible(!filterVisible);
   };
 
   return (
-    <Grid container spacing={2} sx={{ flexGrow: 1, padding: "20px" }}>
-      <Grid size={12}>
-        <Header title={title} />
-      </Grid>
-      <Grid container spacing={2}>
-        <Grid 
-          key="find" 
-          size={{xs: 12, sm: 5, md: 3, lg: 3}} 
-          sx={{padding: "20px"}}
+    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+      <Header title={title} />
+
+      {/* 抽拉按钮 */}
+      <Box textAlign="center" sx={{ mb: 1 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={toggleFilterVisibility}
+          startIcon={filterVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        >
+          {filterVisible ? "Hide Filters" : "Show Filters"}
+        </Button>
+      </Box>
+
+      {/* Filter 区域，使用 Slide 动画效果 */}
+      <Slide direction="down" in={filterVisible} mountOnEnter unmountOnExit>
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+            backgroundColor: "#f5f5f5",
+            padding: "10px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
         >
           <FilterCard
             onUserInput={handleChange}
@@ -73,24 +100,27 @@ function MovieListPageTemplate({ movies, title, action }) {
             starRateFilter={starRateFilter}
             releaseYearFilter={releaseYearFilter}
           />
+        </Box>
+      </Slide>
+
+      {/* 电影列表区域 */}
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          height: "calc(100vh - 300px)", // 设置高度，确保滚动条可见
+          padding: "20px",
+          boxSizing: "border-box", // 防止内容被裁剪
+        }}
+      >
+        <Grid container spacing={2} justifyContent="flex-start">
+          <Grid item {...layoutConfig}>
+            <MovieList action={action} movies={paginatedMovies} />
+          </Grid>
         </Grid>
 
-        <Grid size={{xs: 12, sm: 9, md: 9, lg: 9}}>
-          <MovieList action={action} movies={paginatedMovies}></MovieList>
-        </Grid>
-
-        <Grid container justifyContent="center" alignItems="center"
-          sx={{
-            position: "fixed",
-            bottom: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            backgroundColor: "white",
-            padding: "10px",
-            boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
-            zIndex: 1000,
-          }}
-        >
+        {/* 分页组件 */}
+        <Grid container justifyContent="center" sx={{ margin: "20px 0" }}>
           <Pagination
             count={Math.ceil(displayedMovies.length / itemsPerPage)}
             page={page}
@@ -100,8 +130,10 @@ function MovieListPageTemplate({ movies, title, action }) {
             variant="outlined"
           />
         </Grid>
-      </Grid>
-    </Grid>
+      </Box>
+
+    </Box>
   );
 }
+
 export default MovieListPageTemplate;

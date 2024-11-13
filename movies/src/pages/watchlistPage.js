@@ -16,16 +16,21 @@ const WatchlistPage = () => {
     }))
   );
 
-  const isLoading = watchlistMovieQueries.find((q) => q.isLoading);
+  const isLoading = watchlistMovieQueries.some((q) => q.isLoading);
 
   if (isLoading) {
     return <Spinner />;
   }
 
   const movies = watchlistMovieQueries.map((q) => {
-    q.data.genre_ids = q.data.genres.map((g) => g.id);
-    return q.data;
-  });
+    if (q.data) {
+      q.data.genre_ids = q.data.genres.map((g) => g.id);
+      return q.data;
+    }
+    return null;
+  }).filter((movie) => movie !== null);
+
+  console.log("Loaded Movies:", movies);
 
   return (
     <PageTemplate
@@ -36,6 +41,7 @@ const WatchlistPage = () => {
           <RemoveFromWatchlist movie={movie} />
         </>
       )}
+      layoutConfig={{ xs: 12, sm: 6, md: 4, lg: 3 }} 
     />
   );
 };
