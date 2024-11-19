@@ -47,15 +47,25 @@ const BackgroundContainer = styled(Box)({
 });
 
 // 左上角图片样式
-const WelcomeImage = styled("img")({
+const WelcomeImage = styled("img")(({ theme }) => ({
   position: "absolute",
-  top: "20px",
-  left: "30px",
-  width: "600px",
-  height: "600px",
-  transform: "rotate(-45deg)", // 逆时针旋转 45 度
+  top: "10%",
+  left: "2%",
+  maxWidth: "40vw", // 最大宽度设为屏幕宽度的 40%
+  maxHeight: "40vh", // 最大高度设为屏幕高度的 40%
+  transform: "rotate(-35deg)",
   zIndex: 10,
-});
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "50vw", // 中等屏幕时调整宽度为 50%
+    maxHeight: "30vh", // 高度调整为 30%
+  },
+  [theme.breakpoints.down("sm")]: {
+    top: "5%", // 小屏幕时调整位置
+    left: "2%",
+    maxWidth: "60vw", // 小屏幕时宽度调整为 60%
+    maxHeight: "20vh", // 高度调整为 20%
+  },
+}));
 
 const LoginPage = () => {
   const { user, signInWithGoogle, registerWithEmail, signInWithEmail, logout } = useContext(AuthContext);

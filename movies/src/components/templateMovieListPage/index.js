@@ -16,6 +16,8 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [languageFilter, setLanguageFilter] = useState("");
   const [starRateFilter, setStarRateFilter] = useState("");
   const [releaseYearFilter, setReleaseYearFilter] = useState("");
+  const [sortField, setSortField] = useState(""); // 新增：排序字段
+  const [sortOrder, setSortOrder] = useState("asc"); // 新增：排序顺序
   const [page, setPage] = useState(1);
   const [filterVisible, setFilterVisible] = useState(false);
   const itemsPerPage = 8;
@@ -29,7 +31,28 @@ function MovieListPageTemplate({ movies, title, action }) {
     .filter((m) => (starRateFilter ? m.vote_average >= Number(starRateFilter) : true))
     .filter((m) => (releaseYearFilter ? m.release_date.startsWith(releaseYearFilter) : true))
     .filter((m) => (languageFilter ? m.original_language === languageFilter : true));
+  
+  // 新增：排序逻辑
+  if (sortField !== "All" && sortOrder !== "All") {
+    displayedMovies = displayedMovies.sort((a, b) => {
+      if (sortField === "title") {
+        return sortOrder === "asc"
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      }
+      if (sortField === "releaseDate") {
+        return sortOrder === "asc"
+          ? new Date(a.release_date) - new Date(b.release_date)
+          : new Date(b.release_date) - new Date(a.release_date);
+      }
+      if (sortField === "rating") {
+        return sortOrder === "asc" ? a.vote_average - b.vote_average : b.vote_average - a.vote_average;
+      }
+      return 0;
+    });
+  }  
 
+  // 分页逻辑
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedMovies = displayedMovies.slice(startIndex, endIndex);
@@ -54,6 +77,12 @@ function MovieListPageTemplate({ movies, title, action }) {
         break;
       case "releaseYear":
         setReleaseYearFilter(value);
+        break;
+      case "sortField": // 新增：处理排序字段
+        setSortField(value);
+        break;
+      case "sortOrder": // 新增：处理排序顺序
+        setSortOrder(value);
         break;
       default:
         break;
@@ -99,6 +128,8 @@ function MovieListPageTemplate({ movies, title, action }) {
             languageFilter={languageFilter}
             starRateFilter={starRateFilter}
             releaseYearFilter={releaseYearFilter}
+            sortField={sortField} // 新增：传递排序字段状态
+            sortOrder={sortOrder} // 新增：传递排序顺序状态
           />
         </Box>
       </Slide>

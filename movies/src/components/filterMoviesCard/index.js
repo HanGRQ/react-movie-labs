@@ -11,6 +11,7 @@ import Select from "@mui/material/Select";
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from "../spinner";
+import Box from "@mui/material/Box";
 
 const formControl = {
   margin: 1,
@@ -67,6 +68,9 @@ export default function FilterMoviesCard(props) {
   const handleLanguageChange = (e) => handleChange(e, "language", e.target.value);
   const handleStarRateChange = (e) => handleChange(e, "starRate", e.target.value);
   const handleReleaseYearChange = (e) => handleChange(e, "releaseYear", e.target.value);
+  // 新增排序字段和排序顺序的处理函数
+  const handleSortFieldChange = (e) => handleChange(e, "sortField", e.target.value);
+  const handleSortOrderChange = (e) => handleChange(e, "sortOrder", e.target.value);
 
   return (
     <Card sx={{ backgroundColor: "rgb(204, 204, 0)" }} variant="outlined">
@@ -170,6 +174,48 @@ export default function FilterMoviesCard(props) {
             ))}
           </Select>
         </FormControl>
+
+      {/* 排序区域 */}
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center", marginTop: 2 }}>
+        {/* 排序字段 */}
+        <FormControl sx={{ width: "45%", backgroundColor: "white", borderRadius: 1 }}>
+          <InputLabel id="sortField-label">Sort By</InputLabel>
+          <Select
+            labelId="sortField-label"
+            id="sortField-select"
+            value={props.sortField || ""}
+            onChange={handleSortFieldChange}
+            displayEmpty
+            renderValue={(selected) => {
+              return selected === "All" ? "All" : selected;
+            }}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="title">Title</MenuItem>
+            <MenuItem value="releaseDate">Release Date</MenuItem>
+            <MenuItem value="rating">Rating</MenuItem>
+          </Select>
+        </FormControl>
+
+        {/* 排序顺序 */}
+        <FormControl sx={{ width: "45%", backgroundColor: "white", borderRadius: 1 }}>
+          <InputLabel id="sortOrder-label">Order</InputLabel>
+          <Select
+            labelId="sortOrder-label"
+            id="sortOrder-select"
+            value={props.sortOrder || ""}
+            onChange={handleSortOrderChange}
+            displayEmpty
+            renderValue={(selected) => {
+              return selected === "All" ? "All" : selected;
+            }}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="asc">Ascending</MenuItem>
+            <MenuItem value="desc">Descending</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>        
       </CardContent>
     </Card>
   );
