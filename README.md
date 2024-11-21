@@ -46,6 +46,7 @@ This repository contains a ReactJS application developed as part of Assignment 1
   - Added social sharing buttons to allow users to share movies to platforms such as Twitter or Facebook.
 - **New Material-UI Components**:
   - **Pagination** for movie lists navigation.
+  - **Tooltip** for display prompt information when the user hovers the mouse over the target element.
   - **Paper** for enhanced visual hierarchy in layouts.
   - **Avatar** for user profile display after login.
 
