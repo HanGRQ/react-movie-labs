@@ -8,20 +8,46 @@ This repository contains a ReactJS application developed as part of Assignment 1
 
 ---
 
-### Features.
+## Features.
 
-+ **Watchlist Functionality** - Users can add and remove movies from their personalized watchlist.
-+ **Responsive UI Design** - Fully responsive layouts using Material-UI Grid for all components, ensuring usability on different screen sizes.
-+ **React Query Integration** - Implemented caching with React Query for all static and parameterized endpoints to improve performance.
-+ **Pagination** - Displayed movies are paginated for a smoother browsing experience.
-+ **Filtering Options** - Users can filter movies by genre, language, star rating, release year, and title.
-+ **Sorting Options** - Users can sort movies by title, release date, or rating in ascending or descending order.
-+ **Dynamic Empty Slot Management** - In pages like favorites, empty slots dynamically fill to maintain consistent layout.
-+ **Firebase Authentication** - Third-party authentication is integrated using Google Firebase for login/logout functionality.
-+ **New Material-UI Components** - Including Pagination for navigating movie lists, Paper for enhancing visual hierarchy, Avatar for displaying user profile pictures, and Divider for adding structural separation between content sections.
-+ **Extensive Linking** - Movie details page links to actor details, recommendations, and similar movies.
-+ **Custom Theming** - Applied Material-UI theming to customize the app's appearance.
-+ **Static and Dynamic Endpoints** - Fetch and cache data from multiple TMDB endpoints.
+#### **1. Extend the App**
+
+- **Static TMDB Endpoints**:
+  - Added `/watchlist` to displays movies the user has added to their watchlist, helping them keep track of movies they want to see.
+  - Added `/trending` endpoints to display trending movies.
+  - Added `/upcoming` to show movies scheduled for future release.
+  - Added ` /now_playing ` to show currently playing movies.
+- **Parameterized TMDB Endpoints**:
+  - Added `/movie/:id/recommendations` to suggest similar movies.
+  - Added `/movie/:id/credits` to display cast and crew details.
+  - Added `/movie/:id/similar` to display similar movies.
+- **Extensive Linking**:
+  - From movie details, users can navigate to related content like actor profiles or movie recommendations.
+  - Actor pages link back to the movies they have been part of, creating a networked browsing experience.
+
+#### **2. Extend the Functionality**
+
+- **Caching with React Query**:
+  - After modifying and checking, all API endpoints (static and parameterized) are cached.
+- **Advanced Filtering Options**:
+  - New options, like language, star rating, and release year are added to the filter.
+- **Sorting and Searching**:
+  - Users can sort movies by title, release date, or rating in ascending/descending order.
+  - Integrated a search bar to find movies.
+
+#### **3. Additional Features**
+
+- **Responsive UI Design**:
+  - Fully responsive layouts optimized for various screen sizes using Material-UI Grid.
+- **Pagination**:
+  - Added pagination function to movie lists for smoother browsing experience.
+- **Third-party Authentication**:
+  - Added Firebase Authentication login and logout, including common email with password and Google Sign-In.
+  - Added social sharing buttons to allow users to share movies to platforms such as Twitter or Facebook.
+- **New Material-UI Components**:
+  - **Pagination** for movie lists navigation.
+  - **Paper** for enhanced visual hierarchy in layouts.
+  - **Avatar** for user profile display after login.
 
 ---
 
@@ -53,90 +79,58 @@ This repository contains a ReactJS application developed as part of Assignment 1
 
 ## API endpoints.
 
-+ **Discover Movies** - `/discover/movie`: Fetches a list of movies based on various filters.
-
-  **Movie Genres** - `/genre/movie/list`: Retrieves the list of movie genres.
-
-  **Movie Details** - `/movie/:id`: Retrieves detailed information about a specific movie.
-
-  **Movie Recommendations** - `/movie/:id/recommendations`: Fetches a list of recommended movies similar to a specific movie.
-
-  **Similar Movies** - `/movie/:id/similar`: Fetches movies similar to a specific movie.
-
-  **Movie Credits** - `/movie/:id/credits`: Retrieves the cast and crew information of a specific movie.
-
-  **Movie Reviews** - `/movie/:id/reviews`: Fetches user reviews for a specific movie.
-
-  **Movie Images** - `/movie/:id/images`: Retrieves posters and images related to a specific movie.
-
-  **Trending Movies** - `/trending/movie/week`: Fetches a list of trending movies for the current week.
-
-  **Now Playing Movies** - `/movie/now_playing`: Fetches a list of movies currently playing in theatres.
-
-  **Upcoming Movies** - `/movie/upcoming`: Retrieves a list of movies that are set to release soon.
-
-  **Actor Details** - `/person/:id`: Retrieves detailed information about a specific actor.
-
-  **Actor Movies** - `/person/:id/movie_credits`: Fetches movies associated with a specific actor (e.g., roles they’ve played).
++ **New Static Endpoints**:
+  - `/login` - Login and register page.
+  - `/movies/trending` - Trending movies.
+  - `/movies/now_playing` - Currently playing movies.
+  - `/movies/upcoming` - Upcoming movies.
+  - `/watchlist` - Add movies into watchlist.
++ **New Parameterized Endpoints**:
+  - `/movie/:id/recommendations` - Movie recommendations.
+  - `/movie/:id/credits` - Cast and crew details.
+  - `/movie/:id/similar` - Similar movies.
+  - `/actor/:id` - Actor and actor movie details.
 
 ---
 
 ## Routing.
 
+**New routes that added to the project as below:**
+
 + **/login** - Displays the login page for user authentication.
-+ **/** - Displays the home page with trending or featured movies (requires authentication).
-+ **/movies/favorites** - Displays the user's list of favorite movies (requires authentication).
 + **/movies/upcoming** - Displays a list of upcoming movies (requires authentication).
 + **/movies/trending** - Displays a list of trending movies (requires authentication).
 + **/movies/now_playing** - Displays a list of movies currently playing in theatres (requires authentication).
 + **/watchlist** - Displays the user's watchlist of movies to be watched (requires authentication).
-+ **/movies/:id**\- Displays detailed information about a specific movie (requires authentication).
 + **/movie/:id/recommendations**\- Displays recommended movies based on a specific movie (requires authentication).
 + **/movie/:id/credits** \- Displays the cast and crew information of a specific movie (requires authentication).
-+ **/reviews/:movieId/:reviewId**\- Displays a detailed review for a specific movie (requires authentication).
-+ **/reviews/form** - Provides a form for users to submit their own movie reviews (requires authentication).
 + **/actor/:id**\- Displays detailed information about a specific actor, including their associated movies (requires authentication).
-+ ***** - Redirects all undefined routes to the login page.
 
 ### Authentication
 
-- Protected Routes:
+- **Protected Routes:**
   - The following routes require the user to be authenticated:
     - `/`, `/movies/favorites`, `/movies/:id`, `/movie/:id/recommendations`, `/movie/:id/credits`, `/reviews/:movieId/:reviewId`, `/reviews/form`, `/movies/upcoming`, `/movies/trending`, `/movies/now_playing`, `/watchlist`, `/actor/:id`.
-- Public Routes:
+- **Public Routes:**
   - `/login` is the only public route available for unauthenticated users.
 
 ---
 
 ## Independent learning.
 
-This project required independent research and implementation of several new concepts and technologies not covered in the course. These include:
-
-1. **React Query**:
-   - Used to fetch and cache data from TMDB API endpoints.
-   - Files: `api/tmdb-api.js`, `favoriteMoviesPage.js`, `templateMoviePage.js`
-   - References: 
-     - [React Query Documentation](https://react-query.tanstack.com/)
-
-2. **Firebase Authentication**:
+1. **Firebase Authentication**:
    - Implemented Google login and logout functionality using Firebase.
    - Files: `contexts/authContext.js`, `loginPage.js`
    - References:
      - [Firebase Authentication Documentation](https://firebase.google.com/docs/auth)
-
+2. **React-Share**: 
+   - Added Facebook and Twitter social sharing buttons on the movie details page.
 3. **Material-UI Components**:
    - Added advanced components like Accordion, Tabs, and Paper for better UI/UX.
    - Files: `filterMoviesCard.js`, `templateMovieListPage.js`
    - References:
      - [Material-UI Documentation](https://mui.com/)
-
-4. **Responsive Layouts**:
-   - Ensured all components and pages are responsive using Material-UI's Grid system.
-   - Files: `templateMoviePage.js`, `pageTemplate.js`
-   - References:
-     - [Responsive Grid Documentation](https://mui.com/system/grid/)
-
-5. **Dynamic Layout Management**:
+4. **Dynamic Layout Management**:
    - Added logic to handle dynamic empty slot management for pages like favorites.
    - Files: `templateMoviePage.js`, `favoriteMoviesPage.js`
    - References:

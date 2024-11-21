@@ -2,14 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBXVxauC-raivDIb5mofTLkTmq74BAkkbk",
-    authDomain: "movieca-project.firebaseapp.com",
-    projectId: "movieca-project",
-    storageBucket: "movieca-project.firebasestorage.app",
-    messagingSenderId: "63509664346",
-    appId: "1:63509664346:web:7858d07577202e732b7e63"
-  };
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+};
 
-// 初始化 Firebase 应用
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

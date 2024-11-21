@@ -13,6 +13,11 @@ import MovieReviews from "../movieReviews";
 import MovieRecommendations from "../movieRecommendations"; 
 import MovieCredits from "../movieCredits"; 
 import MovieSimilar from "../movieSimilar";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
+import { FacebookIcon, TwitterIcon } from "react-share";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+
 
 const root = {
   display: "flex",
@@ -69,6 +74,39 @@ const MovieDetails = ({ movie }) => {
           </li>
         ))}
       </Paper>
+
+      {/* 分享按钮 */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          marginTop: 4,
+          padding: 2,
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+        }}
+      >
+        <Typography variant="h6" component="p">
+          Share this movie:
+        </Typography>
+        <FacebookShareButton
+          url={`https://www.themoviedb.org/movie/${movie.id}`}
+          quote={`Check out this amazing movie: ${movie.title}`}
+          hashtag="#TMDB"
+        >
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+        <TwitterShareButton
+          url={`https://www.themoviedb.org/movie/${movie.id}`}
+          title={`Check out this amazing movie: ${movie.title}`}
+          hashtags={["TMDB", "Movies"]}
+        >
+          <TwitterIcon size={32} round />
+        </TwitterShareButton>
+      </Box>
+
+      <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
 
       {/* Floating Buttons */}
       <Fab
